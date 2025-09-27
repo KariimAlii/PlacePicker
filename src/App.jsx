@@ -5,11 +5,27 @@ import { AVAILABLE_PLACES } from './data.js';
 import Modal from './components/Modal.jsx';
 import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
+import {sortPlacesByDistance} from "./loc.js";
 
 function App() {
     const modal = useRef();
     const selectedPlace = useRef();
     const [pickedPlaces, setPickedPlaces] = useState([]);
+
+    // SIDE EFFECT
+    // - takes time
+    // - has nothing to do with loading this app component
+    // - the app component will be loaded before this function being executed
+    // ,because it will only be executed when the user confirms that browser can access his location
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const sortedPlaces = sortPlacesByDistance(
+                AVAILABLE_PLACES,
+                position.coords.latitude,
+                position.coords.longitude
+            );
+        }
+    );
 
     function handleStartRemovePlace(id) {
         modal.current.open();
