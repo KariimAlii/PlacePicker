@@ -10,6 +10,7 @@ import {sortPlacesByDistance} from "./loc.js";
 function App() {
     const modal = useRef();
     const selectedPlace = useRef();
+    const [availablePlaces, setAvailablePlaces] = useState([]);
     const [pickedPlaces, setPickedPlaces] = useState([]);
 
     // SIDE EFFECT
@@ -24,6 +25,8 @@ function App() {
                 position.coords.latitude,
                 position.coords.longitude
             );
+
+            setAvailablePlaces(sortedPlaces);
         }
     );
 
@@ -79,7 +82,7 @@ function App() {
                 />
                 <Places
                     title="Available Places"
-                    places={AVAILABLE_PLACES}
+                    places={availablePlaces}
                     onSelectPlace={handleSelectPlace}
                 />
             </main>
