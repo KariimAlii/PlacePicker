@@ -15,7 +15,7 @@ function App() {
 
     // useEffect is executed after the component function execution finished
     // when you setAvailablePlaces => update state => re-execution of component
-    // the useEffect will be re-executed if and only if the dependencies array is different from the first time
+    // the useEffect will be re-executed if and only if one of its dependencies change
     useEffect(
         () => {
             navigator.geolocation.getCurrentPosition(
