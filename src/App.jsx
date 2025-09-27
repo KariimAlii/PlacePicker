@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 import Places from './components/Places.jsx';
 import { AVAILABLE_PLACES } from './data.js';
@@ -13,22 +13,26 @@ function App() {
     const [availablePlaces, setAvailablePlaces] = useState([]);
     const [pickedPlaces, setPickedPlaces] = useState([]);
 
-    // SIDE EFFECT
-    // - takes time
-    // - has nothing to do with loading this app component
-    // - the app component will be loaded before this function being executed
-    // ,because it will only be executed when the user confirms that browser can access his location
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const sortedPlaces = sortPlacesByDistance(
-                AVAILABLE_PLACES,
-                position.coords.latitude,
-                position.coords.longitude
-            );
+    // useEffect is executed after the component function execution finished
+    // when you setAvailablePlaces => update state => re-execution of component
+    // the useEffect will be re-executed if and only if the dependencies array is different from the first time
+    useEffect(
+        () => {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const sortedPlaces = sortPlacesByDistance(
+                        AVAILABLE_PLACES,
+                        position.coords.latitude,
+                        position.coords.longitude
+                    );
 
-            setAvailablePlaces(sortedPlaces);
-        }
-    );
+                    setAvailablePlaces(sortedPlaces);
+                }
+            );
+        },
+        [] // array of dependencies of this effect function
+    )
+
 
     function handleStartRemovePlace(id) {
         modal.current.open();
@@ -83,6 +87,7 @@ function App() {
                 <Places
                     title="Available Places"
                     places={availablePlaces}
+                    fallbackText="Sorting places by distance..."
                     onSelectPlace={handleSelectPlace}
                 />
             </main>
