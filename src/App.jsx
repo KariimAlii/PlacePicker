@@ -51,6 +51,13 @@ function App() {
             const place = AVAILABLE_PLACES.find((place) => place.id === id);
             return [place, ...prevPickedPlaces];
         });
+
+        // It's a side effect but you can't use useEffect() here
+        // because react hooks must be used directly on the top level of component function
+        const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+        if(storedIds.indexOf(id) === -1) {
+            localStorage.setItem('selectedPlaces', JSON.stringify([id, ...storedIds]));
+        }
     }
 
     function handleRemovePlace() {
