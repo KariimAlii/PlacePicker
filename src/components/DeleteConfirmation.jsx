@@ -29,8 +29,8 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
     // onConfirm is a function
     // when adding functions as dependencies => you may cause an infinite loop
     // in our case the effect is triggered 2 times when choosing (No)
-    // why ? because onConfirm --> handleStopRemovePlace --> state change --> app component re-execution -->
-    // --> redefinition of handleStopRemovePlace --> change value for onConfirm --> useEffect executes again
+    // why ? because onConfirm --> handleRemovePlace --> state change --> app component re-execution -->
+    // --> redefinition of handleRemovePlace --> change value for onConfirm --> useEffect executes again
     // but when modal open = false ==> {open ? children : null}  ==> DeleteConfirmation component is removed from the dom
     // --> Cleanup function executes --> clearTimeout
   return (
