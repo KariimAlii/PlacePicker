@@ -1,4 +1,14 @@
 export default function DeleteConfirmation({ onConfirm, onCancel }) {
+
+    // Auto Confirm Delete if 3 seconds passed,
+    // but you have a problem
+    // this component is always a part of the dom  from the first application loading
+    // but it's hidden as the modal is hidden but it exists in the dom
+    // so that it will automatically be executed after the app component loads
+    setTimeout(() => {
+        onConfirm();
+    }, 3000);
+
   return (
     <div id="delete-confirmation">
       <h2>Are you sure?</h2>
