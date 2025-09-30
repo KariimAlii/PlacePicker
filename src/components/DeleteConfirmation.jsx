@@ -25,7 +25,7 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
         };
 
     }, [onConfirm]) // i have no dependencies => the effect function will never run again
-
+    // If you use a prop inside an effect , you need to include it in dependencies
     // ESLint: React Hook useEffect has a missing dependency:
     // 'onConfirm'. Either include it or remove the dependency array.
     // If 'onConfirm' changes too often,
