@@ -24,9 +24,13 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
             clearTimeout(timer);
         };
 
-    }, []) // i have no dependencies => the effect function will never run again
+    }, [onConfirm]) // i have no dependencies => the effect function will never run again
 
-
+    // ESLint: React Hook useEffect has a missing dependency:
+    // 'onConfirm'. Either include it or remove the dependency array.
+    // If 'onConfirm' changes too often,
+    // find the parent component that defines it and wrap that definition in useCallback.
+    // (react-hooks/exhaustive-deps)
 
   return (
     <div id="delete-confirmation">
