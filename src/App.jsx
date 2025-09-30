@@ -67,6 +67,8 @@ function App() {
 
         // It's a side effect but you can't use useEffect() here
         // because react hooks must be used directly on the top level of component function
+
+        // Case 3 : a side effect that can't use useEffect() hook
         const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
         if(storedIds.indexOf(id) === -1) {
             localStorage.setItem('selectedPlaces', JSON.stringify([id, ...storedIds]));
@@ -79,7 +81,7 @@ function App() {
         );
         modal.current.close();
 
-        // Case 3 : a side effect that can't use useEffect() hook
+        // Case 4 : a side effect that can't use useEffect() hook
         const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
         localStorage.setItem(
             'selectedPlaces',
