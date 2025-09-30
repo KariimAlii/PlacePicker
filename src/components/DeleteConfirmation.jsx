@@ -26,12 +26,13 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
 
     }, [onConfirm]) // i have no dependencies => the effect function will never run again
     // If you use a prop inside an effect , you need to include it in dependencies
-    // ESLint: React Hook useEffect has a missing dependency:
-    // 'onConfirm'. Either include it or remove the dependency array.
-    // If 'onConfirm' changes too often,
-    // find the parent component that defines it and wrap that definition in useCallback.
-    // (react-hooks/exhaustive-deps)
-
+    // onConfirm is a function
+    // when adding functions as dependencies => you may cause an infinite loop
+    // in our case the effect is triggered 2 times when choosing (No)
+    // why ? because onConfirm --> handleStopRemovePlace --> state change --> app component re-execution -->
+    // --> redefinition of handleStopRemovePlace --> change value for onConfirm --> useEffect executes again
+    // but when modal open = false ==> {open ? children : null}  ==> DeleteConfirmation component is removed from the dom
+    // --> Cleanup function executes --> clearTimeout
   return (
     <div id="delete-confirmation">
       <h2>Are you sure?</h2>
