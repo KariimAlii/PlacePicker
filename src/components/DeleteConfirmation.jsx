@@ -1,3 +1,5 @@
+import {useEffect} from "react";
+
 export default function DeleteConfirmation({ onConfirm, onCancel }) {
 
     // Auto Confirm Delete if 3 seconds passed,
@@ -6,12 +8,25 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
     // but it's hidden as the modal is hidden but it exists in the dom
     // so that it will automatically be executed after the app component loads
 
-    // Problem : If you choose No , after 3 seconds the item will be removed
-    // because onConfirm() will be called !!
-    console.log('Timer SET')
-    setTimeout(() => {
-        onConfirm();
-    }, 3000);
+    // Effect Cleanup function => will be executed right before the effect function runs again
+    // You define a cleanup function by returning it from inside the effect function
+
+    // ==> this cleanup function will be executed before this component is removed from the DOM
+
+    useEffect(() => {
+        console.log('Timer SET')
+        const timer = setTimeout(() => {
+            onConfirm();
+        }, 3000);
+
+        return () => {
+            console.log("Cleaning Up Timer")
+            clearTimeout(timer);
+        };
+
+    }, []) // i have no dependencies => the effect function will never run again
+
+
 
   return (
     <div id="delete-confirmation">
