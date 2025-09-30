@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 
 import Places from './components/Places.jsx';
 import { AVAILABLE_PLACES } from './data.js';
@@ -81,7 +81,9 @@ function App() {
         }
     }
 
-    function handleRemovePlace() {
+    // Using the useCallback Hook , this inner function handleRemovePlace is not recreated
+    // every time the component functions gets re-executed
+    const handleRemovePlace = useCallback(function handleRemovePlace() {
         setPickedPlaces((prevPickedPlaces) =>
             prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
         );
@@ -97,7 +99,8 @@ function App() {
                 storedIds.filter(id => id !== selectedPlace.current)
             )
         );
-    }
+    }, [])
+
 
     return (
         <>
