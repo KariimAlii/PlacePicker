@@ -7,6 +7,8 @@ import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
 import {sortPlacesByDistance} from "./loc.js";
 
+
+// Case 1 : You can use useEffect() but you don't need it
 const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
 
 const storedPlaces = storedIds
@@ -23,6 +25,10 @@ function App() {
     // useEffect is executed after the component function execution finished
     // when you setAvailablePlaces => update state => re-execution of component
     // the useEffect will be re-executed if and only if one of its dependencies change
+
+    // Case 2 : You need to use useEffect() because your logic needs to be executed after component initialization
+    // and you update some state that re-executes the component function
+    // so that without useEffect() you will go into infinite loop
     useEffect(
         () => {
             navigator.geolocation.getCurrentPosition(
@@ -73,6 +79,7 @@ function App() {
         );
         modal.current.close();
 
+        // Case 3 : a side effect that can't use useEffect() hook
         const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
         localStorage.setItem(
             'selectedPlaces',
