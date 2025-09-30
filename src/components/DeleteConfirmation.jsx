@@ -5,6 +5,9 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
     // this component is always a part of the dom  from the first application loading
     // but it's hidden as the modal is hidden but it exists in the dom
     // so that it will automatically be executed after the app component loads
+
+    // Problem : If you choose No , after 3 seconds the item will be removed
+    // because onConfirm() will be called !!
     console.log('Timer SET')
     setTimeout(() => {
         onConfirm();
