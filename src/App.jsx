@@ -33,6 +33,9 @@ function App() {
     // so that without useEffect() you will go into infinite loop
     useEffect(
         () => {
+            // (AVAILABLE_PLACES) or any such values are not considered dependencies
+            // useEffect() only cares about dependencies that will cause the component
+            // function to re-execute again
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const sortedPlaces = sortPlacesByDistance(

@@ -11,6 +11,8 @@ const Modal = function Modal({ open, children }) {
     open ? dialog.current.showModal() : dialog.current.close();
   }, [open]) // having an empty array of dependencies will give you a warning !!
 
+  // Effect Dependencies would be functions or context values that depend on or use (State) or (Props)
+  // why ?? because any change in state or props will cause a component function to re-execute again and consequentially useEffect() to execute again
   return createPortal(
     <dialog className="modal" ref={dialog}>
       {children}
