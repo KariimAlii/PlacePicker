@@ -5,9 +5,12 @@ const TIMER = 3000;
 export default function DeleteConfirmation({ onConfirm, onCancel }) {
     const [remainingTime, setRemainingTime] = useState(TIMER)
 
-    setInterval(() => {
-        setRemainingTime(prevRemainingTime => prevRemainingTime - 10)
-    }, 10);
+    useEffect(() => {
+        setInterval(() => {
+            console.log("INTERVAL")
+            setRemainingTime(prevRemainingTime => prevRemainingTime - 10)
+        }, 10);
+    }, [])
 
     // Auto Confirm Delete if 3 seconds passed,
     // but you have a problem
