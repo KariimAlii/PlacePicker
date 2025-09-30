@@ -15,7 +15,7 @@ const Modal = function Modal({ open, children }) {
   // why ?? because any change in state or props will cause a component function to re-execute again and consequentially useEffect() to execute again
   return createPortal(
     <dialog className="modal" ref={dialog}>
-      {children}
+      {open ? children : null}
     </dialog>,
     document.getElementById('modal')
   );

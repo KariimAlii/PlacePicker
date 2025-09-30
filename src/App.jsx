@@ -102,12 +102,10 @@ function App() {
     return (
         <>
             <Modal open={isModalOpen}>
-                {isModalOpen && (
-                    <DeleteConfirmation
-                        onCancel={handleStopRemovePlace}
-                        onConfirm={handleRemovePlace}
-                    />
-                )}
+                <DeleteConfirmation
+                    onCancel={handleStopRemovePlace}
+                    onConfirm={handleRemovePlace}
+                />
             </Modal>
 
             <header>
