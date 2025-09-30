@@ -1,21 +1,10 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
+import ProgressBar from "./ProgressBar.jsx";
+
 
 const TIMER = 3000;
 
 export default function DeleteConfirmation({ onConfirm, onCancel }) {
-    const [remainingTime, setRemainingTime] = useState(TIMER)
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            console.log("INTERVAL")
-            setRemainingTime(prevRemainingTime => prevRemainingTime - 10)
-        }, 10);
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [])
-
     // Auto Confirm Delete if 3 seconds passed,
     // but you have a problem
     // this component is always a part of the dom  from the first application loading
@@ -59,7 +48,7 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
           Yes
         </button>
       </div>
-        <progress value={remainingTime} max={TIMER}/>
+        <ProgressBar timer={TIMER}/>
     </div>
   );
 }
