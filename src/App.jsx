@@ -19,8 +19,8 @@ const storedPlaces = storedIds
     );
 
 function App() {
-    const modal = useRef();
     const selectedPlace = useRef();
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [availablePlaces, setAvailablePlaces] = useState([]);
     const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
 
@@ -50,12 +50,12 @@ function App() {
 
 
     function handleStartRemovePlace(id) {
-        modal.current.open();
+        setIsModalOpen(true);
         selectedPlace.current = id;
     }
 
     function handleStopRemovePlace() {
-        modal.current.close();
+        setIsModalOpen(false);
     }
 
     function handleSelectPlace(id) {
@@ -82,7 +82,8 @@ function App() {
         setPickedPlaces((prevPickedPlaces) =>
             prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
         );
-        modal.current.close();
+
+        setIsModalOpen(false);
 
         // Case 4 : a side effect that can't use useEffect() hook
         // because useEffect() can only be used on the top level of component function
@@ -97,7 +98,7 @@ function App() {
 
     return (
         <>
-            <Modal ref={modal}>
+            <Modal open={isModalOpen}>
                 <DeleteConfirmation
                     onCancel={handleStopRemovePlace}
                     onConfirm={handleRemovePlace}
