@@ -9,6 +9,8 @@ import {sortPlacesByDistance} from "./loc.js";
 
 
 // Case 1 : You can use useEffect() but you don't need it
+// because you need to execute this logic only once
+// and you don't need the component function to be executed to execute this logic
 const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
 
 const storedPlaces = storedIds
