@@ -6,10 +6,9 @@ export default function AvailablePlaces({ onSelectPlace }) {
     const [availablePlaces, setAvailablePlaces] = useState([])
     //! Available Places needs to be fetched from backend
     //! This Effect will be executed once after the execution of component function
-    useEffect(() => {
-        fetch('http://localhost:3000/places')
-            .then(response => response.json())
-            .then(data => setAvailablePlaces(data.places));
+    useEffect(async () => {
+        await fetch('http://localhost:3000/places')
+
     }, [])
 
 
