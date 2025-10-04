@@ -39,7 +39,7 @@ function App() {
             return [selectedPlace, ...prevPickedPlaces];
         });
 
-        updateUserPlaces(pickedPlaces.map(place => place.id));
+        updateUserPlaces([selectedPlace, ...pickedPlaces]);
     }
 
     // Using the useCallback Hook , this inner function handleRemovePlace is not recreated
