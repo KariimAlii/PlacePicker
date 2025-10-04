@@ -5,7 +5,10 @@ import {useState} from "react";
 export default async function AvailablePlaces({ onSelectPlace }) {
     const [availablePlaces, setAvailablePlaces] = useState([])
     //! Available Places needs to be fetched from backend
-    const response = await fetch('http://localhost:3000/places')
+    //! Infinite Loop !!
+    fetch('http://localhost:3000/places')
+        .then(response => response.json())
+        .then(data => setAvailablePlaces(data.places));
 
 
     return (
