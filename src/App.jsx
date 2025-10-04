@@ -29,6 +29,7 @@ function App() {
     }
 
     async function handleSelectPlace(selectedPlace) {
+        //! Problem : Optimistic Updating
         setPickedPlaces((prevPickedPlaces) => {
             if(!prevPickedPlaces) {
                 prevPickedPlaces = [];
@@ -42,7 +43,8 @@ function App() {
         try {
             await updateUserPlaces([selectedPlace, ...pickedPlaces]);
         } catch (err) {
-            console.log(err)
+            //! Solution : If something went wrong => we rollback the optimistic update
+            setPickedPlaces(pickedPlaces);
         }
 
     }
