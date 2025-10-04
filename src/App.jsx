@@ -7,6 +7,7 @@ import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
 import AvailablePlaces from "./components/AvailablePlaces.jsx";
 import {updateUserPlaces} from "./proxies.js";
+import ErrorPage from "./components/ErrorPage.jsx";
 
 
 
@@ -15,6 +16,7 @@ function App() {
     const selectedPlace = useRef();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pickedPlaces, setPickedPlaces] = useState([]);
+    const [errorUpdatingPlaces, setErrorUpdatingPlaces] = useState();
 
 
 
@@ -45,6 +47,7 @@ function App() {
         } catch (err) {
             //! Solution : If something went wrong => we rollback the optimistic update
             setPickedPlaces(pickedPlaces);
+            setErrorUpdatingPlaces({ message: err.message || 'Failed to update places' })
         }
 
     }
@@ -62,8 +65,22 @@ function App() {
     }, [])
 
 
+    function handleError() {
+        setErrorUpdatingPlaces(null);
+    }
+
     return (
         <>
+            <Modal open={errorUpdatingPlaces} >
+                {errorUpdatingPlaces && (
+                    <ErrorPage
+                        title="Error Updating places"
+                        message={errorUpdatingPlaces.message}
+                        onConfirm={handleError}
+                    />
+                )}
+            </Modal>
+
             <Modal open={isModalOpen}>
                 <DeleteConfirmation
                     onCancel={handleStopRemovePlace}
