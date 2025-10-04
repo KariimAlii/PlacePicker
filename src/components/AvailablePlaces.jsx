@@ -2,6 +2,7 @@
 import {useEffect, useState} from "react";
 import ErrorPage from "./ErrorPage.jsx";
 import {sortPlacesByDistance} from "../loc.js";
+import {fetchAvailablePlaces} from "../proxies.js";
 
 //! using async is not allowed for component functions
 export default function AvailablePlaces({ onSelectPlace }) {
@@ -15,18 +16,12 @@ export default function AvailablePlaces({ onSelectPlace }) {
         async function fetchPlaces() {
             setIsFetching(true);
             try {
-                const response = await fetch('http://localhost:3000/places');
-                const data = await response.json();
-                if(!response.ok) {
-                    //! ok : success status code 200 , 300
-                    //! otherwise : failure code 400 , 500
-                    throw new Error('failed to fetch places')
-                }
+                const places = await fetchAvailablePlaces();
 
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const sortedPlaces = sortPlacesByDistance(
-                            data.places,
+                            places,
                             position.coords.latitude,
                             position.coords.longitude
                         );
