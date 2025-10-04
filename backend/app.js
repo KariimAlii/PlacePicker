@@ -27,24 +27,15 @@ app.get('/places', async (req, res) => {
 });
 
 app.get('/user-places', async (req, res) => {
-  const placesIdsContent = await fs.readFile('./data/user-places.json');
+  const placesContent = await fs.readFile('./data/user-places.json');
 
-  const placeIds = JSON.parse(placesIdsContent);
-
-  const placesContent = await fs.readFile('./data/places.json');
-
-  const placesData = JSON.parse(placesContent);
-
-  const places = placeIds
-        .map(
-            id => placesData.find(place => place.id === id)
-        );
+  const places = JSON.parse(placesContent);
 
   res.status(200).json({ places });
 });
 
 app.put('/user-places', async (req, res) => {
-  const places = req.body.placeIds;
+  const places = req.body.places;
 
   await fs.writeFile('./data/user-places.json', JSON.stringify(places));
 

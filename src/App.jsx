@@ -28,7 +28,7 @@ function App() {
         setIsModalOpen(false);
     }
 
-    function handleSelectPlace(selectedPlace) {
+    async function handleSelectPlace(selectedPlace) {
         setPickedPlaces((prevPickedPlaces) => {
             if(!prevPickedPlaces) {
                 prevPickedPlaces = [];
@@ -39,7 +39,12 @@ function App() {
             return [selectedPlace, ...prevPickedPlaces];
         });
 
-        updateUserPlaces([selectedPlace, ...pickedPlaces]);
+        try {
+            await updateUserPlaces([selectedPlace, ...pickedPlaces]);
+        } catch (err) {
+            console.log(err)
+        }
+
     }
 
     // Using the useCallback Hook , this inner function handleRemovePlace is not recreated

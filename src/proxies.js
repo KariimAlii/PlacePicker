@@ -9,10 +9,10 @@
     return data.places;
 }
 
-export async function updateUserPlaces(placeIds) {
+export async function updateUserPlaces(places) {
     const response = await fetch('http://localhost:3000/user-places', {
         method: 'PUT',
-        body: JSON.stringify(placeIds),
+        body: JSON.stringify({places}),
         headers: {
             'Content-Type': 'application/json'
         }
