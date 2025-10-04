@@ -1,56 +1,22 @@
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useRef, useState} from 'react';
 
 import Places from './components/Places.jsx';
 import { AVAILABLE_PLACES } from './data.js';
 import Modal from './components/Modal.jsx';
 import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
-import {sortPlacesByDistance} from "./loc.js";
 import AvailablePlaces from "./components/AvailablePlaces.jsx";
+import {updateUserPlaces} from "./proxies.js";
 
 
-// Case 1 : You can use useEffect() but you don't need it
-// because you need to execute this logic only once
-// and you don't need the component function to be executed to execute this logic
-const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
 
-const storedPlaces = storedIds
-    .map(
-        id => AVAILABLE_PLACES.find(place => place.id === id)
-    );
 
 function App() {
     const selectedPlace = useRef();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [availablePlaces, setAvailablePlaces] = useState([]);
-    const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
+    const [pickedPlaces, setPickedPlaces] = useState([]);
 
-    // useEffect is executed after the component function execution finished
-    // when you setAvailablePlaces => update state => re-execution of component
-    // the useEffect will be re-executed if and only if one of its dependencies change
 
-    // Case 2 : You need to use useEffect() because your logic needs to be executed after component initialization
-    // and you update some state that re-executes the component function
-    // so that without useEffect() you will go into infinite loop
-    useEffect(
-        () => {
-            // (AVAILABLE_PLACES) or any such values are not considered dependencies
-            // useEffect() only cares about dependencies that will cause the component
-            // function to re-execute again
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const sortedPlaces = sortPlacesByDistance(
-                        AVAILABLE_PLACES,
-                        position.coords.latitude,
-                        position.coords.longitude
-                    );
-
-                    setAvailablePlaces(sortedPlaces);
-                }
-            );
-        },
-        [] // array of dependencies of this effect function
-    )
 
 
     function handleStartRemovePlace(id) {
@@ -62,24 +28,18 @@ function App() {
         setIsModalOpen(false);
     }
 
-    function handleSelectPlace(id) {
+    function handleSelectPlace(selectedPlace) {
         setPickedPlaces((prevPickedPlaces) => {
-            if (prevPickedPlaces.some((place) => place.id === id)) {
+            if(!prevPickedPlaces) {
+                prevPickedPlaces = [];
+            }
+            if (prevPickedPlaces.some((place) => place.id === selectedPlace.id)) {
                 return prevPickedPlaces;
             }
-            const place = AVAILABLE_PLACES.find((place) => place.id === id);
-            return [place, ...prevPickedPlaces];
+            return [selectedPlace, ...prevPickedPlaces];
         });
 
-        // It's a side effect but you can't use useEffect() here
-        // because react hooks must be used directly on the top level of component function
-
-        // Case 3 : a side effect that can't use useEffect() hook
-        // because useEffect() can only be used on the top level of component function
-        const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
-        if(storedIds.indexOf(id) === -1) {
-            localStorage.setItem('selectedPlaces', JSON.stringify([id, ...storedIds]));
-        }
+        updateUserPlaces(pickedPlaces.map(place => place.id));
     }
 
     // Using the useCallback Hook , this inner function handleRemovePlace is not recreated
@@ -91,15 +51,7 @@ function App() {
 
         setIsModalOpen(false);
 
-        // Case 4 : a side effect that can't use useEffect() hook
-        // because useEffect() can only be used on the top level of component function
-        const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
-        localStorage.setItem(
-            'selectedPlaces',
-            JSON.stringify(
-                storedIds.filter(id => id !== selectedPlace.current)
-            )
-        );
+
     }, [])
 
 
