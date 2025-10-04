@@ -1,14 +1,17 @@
 ﻿import Places from "./Places.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 //! using async is not allowed for component functions
-export default async function AvailablePlaces({ onSelectPlace }) {
+export default function AvailablePlaces({ onSelectPlace }) {
     const [availablePlaces, setAvailablePlaces] = useState([])
     //! Available Places needs to be fetched from backend
-    //! Infinite Loop !!
-    fetch('http://localhost:3000/places')
-        .then(response => response.json())
-        .then(data => setAvailablePlaces(data.places));
+    //! This Effect will be executed once after the execution of component function
+    useEffect(() => {
+        fetch('http://localhost:3000/places')
+            .then(response => response.json())
+            .then(data => setAvailablePlaces(data.places));
+    }, [])
+
 
 
     return (

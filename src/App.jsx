@@ -6,6 +6,7 @@ import Modal from './components/Modal.jsx';
 import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
 import {sortPlacesByDistance} from "./loc.js";
+import AvailablePlaces from "./components/AvailablePlaces.jsx";
 
 
 // Case 1 : You can use useEffect() but you don't need it
@@ -126,10 +127,7 @@ function App() {
                     places={pickedPlaces}
                     onSelectPlace={handleStartRemovePlace}
                 />
-                <Places
-                    title="Available Places"
-                    places={availablePlaces}
-                    fallbackText="Sorting places by distance..."
+                <AvailablePlaces
                     onSelectPlace={handleSelectPlace}
                 />
             </main>
