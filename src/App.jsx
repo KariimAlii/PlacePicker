@@ -54,15 +54,30 @@ function App() {
 
     // Using the useCallback Hook , this inner function handleRemovePlace is not recreated
     // every time the component functions gets re-executed
-    const handleRemovePlace = useCallback(function handleRemovePlace() {
+    const handleRemovePlace = useCallback(async function handleRemovePlace() {
+        //! optimistic updating
         setPickedPlaces((prevPickedPlaces) =>
-            prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
+            prevPickedPlaces.filter((place) => place.id !== selectedPlace.current.id)
         );
+
+        try {
+            await updateUserPlaces(
+                pickedPlaces.filter((place) => place.id !== selectedPlace.current.id)
+            );
+        } catch(err) {
+            //! rollback the change
+            setPickedPlaces(pickedPlaces);
+            //! return feedback to user
+            setErrorUpdatingPlaces({
+                message: err.message || 'Failed to delete place.'
+            })
+        }
+
 
         setIsModalOpen(false);
 
 
-    }, [])
+    }, [pickedPlaces])
 
 
     function handleError() {
