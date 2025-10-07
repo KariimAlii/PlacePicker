@@ -5,36 +5,34 @@
 //! --- (1) at the top level of React function component
 //! --- (2) at a custom React Hook function
 //! It can't be nested inside if condition or callback ... etc
-import {useEffect} from "react";
-import {fetchAvailablePlaces} from "../proxies.js";
-import {sortPlacesByDistance} from "../loc.js";
+import {useEffect, useState} from "react";
 
-export default function useFetch() {
+export default function useFetch(fetchFn, initialValue) {
     //! You can use other hooks inside your custom hook
+    //!
+    //! Any State Change happens inside your hook will directly affect the parent component that uses that hook
+    const [fetchedData, setFetchedData] = useState(initialValue)
+    const [isFetching, setIsFetching] = useState()
+    const [error, setError] = useState()
     useEffect(() => {
-        async function fetchPlaces() {
+        async function fetchData() {
             setIsFetching(true);
             try {
-                const places = await fetchAvailablePlaces();
-
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const sortedPlaces = sortPlacesByDistance(
-                            places,
-                            position.coords.latitude,
-                            position.coords.longitude
-                        );
-
-                        setAvailablePlaces(sortedPlaces);
-                        setIsFetching(false);
-                    }
-                );
+                const data = await fetchFn();
+                setFetchedData(data);
             } catch (err) {
-                setError(err);
-                setIsFetching(false);
+                setError({ message : err.message || 'Failed to fetch data.'});
             }
+            setIsFetching(false);
         }
 
-        fetchPlaces();
-    }, [])
+        fetchData();
+    }, [fetchFn])
+
+    //! You can group outputs into an array or an object , it's up to you
+    return {
+        isFetching,
+        fetchedData,
+        error
+    }
 }
