@@ -7,7 +7,7 @@ import {fetchAvailablePlaces} from "../proxies.js";
 export default function AvailablePlaces({ onSelectPlace }) {
 
     //! Any State Change happens inside your hook will directly affect the parent component that uses that hook
-    const {isFetching, fetchedData: availablePlaces, error} = useFetch(fetchAvailablePlaces)
+    const {isFetching, fetchedData: availablePlaces, error} = useFetch(fetchAvailablePlaces, [])
 
 
     if(error) {
